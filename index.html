@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Твой безопасный уголок</title>
+    
+    <meta name="description" content="Анонимная психологическая помощь. Техники дыхания, дневник настроения и экстренные контакты.">
+    <meta name="theme-color" content="#f4f7f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container">
+        <header>
+            <h1>Ты в безопасности</h1>
+            <p>Здесь можно выдохнуть. Мы рядом.</p>
+        </header>
+
+        <main>
+            <!-- 1. Блок дыхания -->
+            <section class="glass-card">
+                <h2>Если накрывает паника</h2>
+                <p>Нажми на круг и дыши вместе с ним.</p>
+                <div class="circle-wrapper">
+                    <div class="breathing-circle" id="circle" onclick="startBreathing()">
+                        <span id="circle-text">Нажми</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Дневник настроения -->
+            <section class="glass-card">
+                <h2>Как ты сейчас?</h2>
+                <p>Выбери то, что ближе всего.</p>
+                <div class="mood-container">
+                    <button class="mood-btn" onclick="setMood('Ты справишься. Плохие дни проходят. Обнимаю тебя.')">Плохо</button>
+                    <button class="mood-btn" onclick="setMood('Это нормально — чувствовать усталость. Отдохни, ты имеешь на это право.')">Усталость</button>
+                    <button class="mood-btn" onclick="setMood('Я рад за тебя. Сохрани это чувство, оно поможет в трудную минуту.')">Хорошо</button>
+                    <button class="mood-btn" onclick="setMood('Невероятно. Пусть этот день будет самым лучшим за последнее время.')">Отлично</button>
+                </div>
+                <div id="mood-message" class="mood-message"></div>
+            </section>
+
+            <!-- 3. Блок: Фидбек -->
+            <section class="glass-card">
+                <h2>Поделиться мыслями</h2>
+                <p>Здесь ты можешь выговориться. Это останется только у тебя.</p>
+                <textarea id="feedback-text" class="feedback-input" placeholder="Напиши здесь всё, что не дает покоя..."></textarea>
+                <button class="submit-btn" onclick="saveFeedback()">Сохранить</button>
+                <div class="feedback-actions">
+                    <span class="view-history-btn" onclick="openHistory()">Посмотреть сохраненное</span>
+                </div>
+                <div id="feedback-status" class="feedback-status"></div>
+            </section>
+
+            <!-- 4. Блок: Экстренная помощь -->
+            <section class="glass-card sos-card">
+                <button class="sos-toggle" onclick="toggleSos()">
+                    <span>Экстренная помощь</span>
+                    <span class="sos-icon" id="sos-icon">+</span>
+                </button>
+                <div class="sos-content" id="sos-content">
+                    <p class="sos-desc">Если тебе очень тяжело и ты не хочешь оставаться один, позвони. Это анонимно и бесплатно.</p>
+                    <a href="tel:88002000122" class="sos-btn">Детский телефон доверия (8-800-2000-122)</a>
+                    <a href="tel:84955030600" class="sos-btn">Психологическая помощь МЧС (8-495-503-06-00)</a>
+                    <a href="tel:112" class="sos-btn sos-btn-danger">Единый номер экстренных служб (112)</a>
+                </div>
+            </section>
+
+            <!-- 5. Блок: Практики с табами -->
+            <section class="glass-card">
+                <h2>Практики</h2>
+                <p>Выбери то, что поможет сейчас.</p>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'tab-grounding')">Заземление</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'tab-box-breathing')">Дыхание</button>
+                </div>
+
+                <div id="tab-grounding" class="tab-content active">
+                    <ul class="grounding-list">
+                        <li><span class="num">5</span> вещей, которые видишь</li>
+                        <li><span class="num">4</span> вещи, которые можешь потрогать</li>
+                        <li><span class="num">3</span> звука, которые слышишь</li>
+                        <li><span class="num">2</span> запаха, которые ощущаешь</li>
+                        <li><span class="num">1</span> вкус во рту</li>
+                    </ul>
+                </div>
+
+                <div id="tab-box-breathing" class="tab-content">
+                    <div class="box-breathing-info">
+                        <p class="practice-desc">Техника помогает успокоить нервную систему. Дыши по квадрату:</p>
+                        <ol class="practice-steps">
+                            <li>Вдох — 4 секунды</li>
+                            <li>Задержка — 4 секунды</li>
+                            <li>Выдох — 4 секунды</li>
+                            <li>Задержка — 4 секунды</li>
+                        </ol>
+                        <p class="practice-tip">Повтори цикл 3-4 раза.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО: История записей -->
+    <div class="modal-overlay" id="history-modal" onclick="closeHistoryOnOverlay(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Твои записи</h3>
+                <button class="close-btn" onclick="closeHistory()">&times;</button>
+            </div>
+            <div class="modal-body" id="history-list"></div>
+        </div>
+    </div>
+
+    <!-- НОВОЕ: Кнопка "Наверх" -->
+    <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <script>
+        // 1. Анимация дыхания (круг)
+        let isBreathing = false;
+        let breathingAnimation = null;
+        let textInterval = null;
+
+        function startBreathing() {
+            const circle = document.getElementById('circle');
+            const text = document.getElementById('circle-text');
+            if (isBreathing) return; 
+            isBreathing = true;
+            text.innerText = "Вдох...";
+
+            breathingAnimation = circle.animate([
+                { transform: 'scale(1)', boxShadow: '0 10px 25px rgba(118, 75, 162, 0.3)' },
+                { transform: 'scale(1.4)', boxShadow: '0 15px 40px rgba(118, 75, 162, 0.6)', offset: 0.5 },
+                { transform: 'scale(1)', boxShadow: '0 10px 25px rgba(118, 75, 162, 0.3)' }
+            ], { duration: 8000, iterations: 3, easing: 'ease-in-out' });
+
+            let isInhale = true;
+            textInterval = setInterval(() => {
+                isInhale = !isInhale;
+                text.innerText = isInhale ? "Вдох..." : "Выдох...";
+            }, 4000);
+
+            breathingAnimation.onfinish = () => {
+                clearInterval(textInterval);
+                text.innerText = "Молодец";
+                isBreathing = false;
+                setTimeout(() => { text.innerText = "Ещё раз"; }, 3000);
+            };
+        }
+
+        // 2. Дневник настроения
+        function setMood(message) {
+            const msgBox = document.getElementById('mood-message');
+            msgBox.innerText = message;
+            msgBox.classList.add('show');
+        }
+
+        // 3. Сохранение фидбека
+        function saveFeedback() {
+            const textarea = document.getElementById('feedback-text');
+            const status = document.getElementById('feedback-status');
+            const text = textarea.value.trim();
+
+            if (text === "") {
+                status.innerText = "Пожалуйста, напиши хоть что-нибудь.";
+                status.style.color = "#e53e3e"; 
+                status.classList.add('show');
+                return;
+            }
+
+            let savedThoughts = JSON.parse(localStorage.getItem('myThoughts')) || [];
+            savedThoughts.push({ date: new Date().toLocaleString(), text: text });
+            localStorage.setItem('myThoughts', JSON.stringify(savedThoughts));
+
+            textarea.value = "";
+            status.innerText = "Твоя мысль сохранена.";
+            status.style.color = "#38a169"; 
+            status.classList.add('show');
+            setTimeout(() => { status.classList.remove('show'); }, 4000);
+        }
+
+        // 4. Экстренная помощь (Аккордеон)
+        function toggleSos() {
+            const content = document.getElementById('sos-content');
+            const icon = document.getElementById('sos-icon');
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.innerText = "+";
+                icon.style.transform = "rotate(0deg)";
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.innerText = "−";
+                icon.style.transform = "rotate(180deg)";
+            }
+        }
+
+        // 5. Модальное окно (История)
+        function openHistory() {
+            const modal = document.getElementById('history-modal');
+            const list = document.getElementById('history-list');
+            const savedThoughts = JSON.parse(localStorage.getItem('myThoughts')) || [];
+
+            list.innerHTML = ""; 
+            if (savedThoughts.length === 0) {
+                list.innerHTML = '<div class="empty-history">Здесь пока пусто. Как только ты сохранишь свою первую мысль, она появится здесь.</div>';
+            } else {
+                savedThoughts.slice().reverse().forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'history-item';
+                    div.innerHTML = `<div class="history-date">${item.date}</div><div class="history-text">${item.text}</div>`;
+                    list.appendChild(div);
+                });
+            }
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeHistory() {
+            const modal = document.getElementById('history-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; 
+        }
+
+        function closeHistoryOnOverlay(event) {
+            if (event.target.id === 'history-modal') closeHistory();
+        }
+
+        // 6. Переключение табов (Практики)
+        function switchTab(event, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // 7. Логика кнопки "Наверх" и плавный скролл
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+
+        // Показываем/скрываем кнопку при скролле
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Это и дает плавный скролл
+            });
+        }
+    </script>
+</body>
+</html>
