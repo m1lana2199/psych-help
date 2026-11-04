@@ -135,17 +135,3 @@ header p { color: #718096; font-size: 15px; font-weight: 400; }
         height: 44px;
     }
 }
-
-.privacy-footer {
-    margin-top: 40px;
-    margin-bottom: 30px;
-    text-align: center;
-    padding: 0 10px;
-}
-.privacy-footer p {
-    font-size: 11px;
-    color: #a0aec0;
-    line-height: 1.5;
-    max-width: 350px;
-    margin: 0 auto;
-}
